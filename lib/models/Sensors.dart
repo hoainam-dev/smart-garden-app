@@ -1,8 +1,8 @@
-class Sensor {
-  String id;
-  String value;
-  String topic ;
-  DateTime time;
+class SensorData {
+  final String id;
+  final String temperature;
+  final String humidity;
+  final String soilMoisture;
 
-  Sensor({required this.id, required this.value, required this.topic , required this.time});
+  SensorData({required this.id, required this.temperature, required this.humidity, required this.soilMoisture});
 }

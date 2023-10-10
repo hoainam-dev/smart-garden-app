@@ -1,125 +1,141 @@
 
-import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:smart_garden_app/screens/DeviceScreen.dart';
 import 'package:smart_garden_app/screens/PlantScreen.dart';
 import 'package:smart_garden_app/screens/SensorScreen.dart';
-import 'package:smart_garden_app/widgets/AddPlant.dart';
-import '../ConnectMQTT.dart';
 import 'Home.dart';
 
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
+
+  const MyApp({Key? key}) : super(key: key);
+
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp( // Đặt MaterialApp ở đây
+
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      home: Builder(
+        builder: (BuildContext context) {
+          return const MyHomePage();
+        },
       ),
-      home: MyScaffold(), // Sử dụng MyScaffold thay vì Scaffold trực tiếp
     );
   }
 }
 
-class MyScaffold extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _currentIndex = 0;
+
+  void _onTap(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('App'),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          const Home(),
+          PlantScreen(),
+          const SensorScreen(),
+          DeviceScreen(),
+        ],
       ),
-      body: Home(),
-      bottomNavigationBar: AnimatedContainer(
-        padding: const EdgeInsets.only(
-          bottom: 8,
-        ),
-        duration: const Duration(
-          milliseconds: 800,
-        ),
-        curve: Curves.easeInOutSine,
-        height: 65,
-        child: BottomAppBar(
-          notchMargin: 8.0,
-          shape: const CircularNotchedRectangle(),
-          color: Colors.lightGreen,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              IconButton(
-                color: Colors.white,
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => Home(),
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  Icons.home_outlined,
-                  size: 30,
-                ),
-              ),
-              IconButton(
-                color: Colors.white,
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => PlantScreen(),
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  CupertinoIcons.tree,
-                  size: 30,
-                ),
-              ),
-              IconButton(
-                color: Colors.white,
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => SensorScreen(),
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  CupertinoIcons.selection_pin_in_out,
-                  size: 30,
-                ),
-              ),
-              IconButton(
-                color: Colors.white,
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => DeviceScreen(),
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  CupertinoIcons.device_phone_landscape,
-                  size: 30,
-                ),
-              ),
-            ],
+      bottomNavigationBar: MyAppBar(currentIndex: _currentIndex, onTap: _onTap),
+    );
+  }
+}
+
+class MyAppBar extends StatelessWidget {
+  final int currentIndex;
+  final void Function(int) onTap;
+
+  const MyAppBar({Key? key, required this.currentIndex, required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      notchMargin: 8.0,
+      shape: const CircularNotchedRectangle(),
+      color: Colors.lightGreen,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+            color: currentIndex == 0 ? Colors.white : Colors.white.withOpacity(0.5),
+            onPressed: () => onTap(0),
+            icon: Icon(
+              Icons.home_outlined,
+              size: 30,
+            ),
+            hoverColor: Colors.white.withOpacity(0.2),
+            splashRadius: 20,
+            splashColor: Colors.white.withOpacity(0.5),
           ),
-        ),
+          IconButton(
+            color: currentIndex == 1 ? Colors.white : Colors.white.withOpacity(0.5),
+            onPressed: () => onTap(1),
+            icon: Icon(
+              CupertinoIcons.tree,
+              size: 30,
+            ),
+            hoverColor: Colors.white.withOpacity(0.2),
+            splashRadius: 20,
+            splashColor: Colors.white.withOpacity(0.5),
+          ),
+          IconButton(
+            color: currentIndex == 2 ? Colors.white : Colors.white.withOpacity(0.5),
+            onPressed: () => onTap(2),
+            icon: Icon(
+              CupertinoIcons.selection_pin_in_out,
+              size: 30,
+            ),
+            hoverColor: Colors.white.withOpacity(0.2),
+            splashRadius: 20,
+            splashColor: Colors.white.withOpacity(0.5),
+          ),
+          IconButton(
+            color: currentIndex == 3 ? Colors.white : Colors.white.withOpacity(0.5),
+            onPressed: () => onTap(3),
+            icon: Icon(
+              CupertinoIcons.device_phone_landscape,
+              size: 30,
+            ),
+            hoverColor: Colors.white.withOpacity(0.2),
+            splashRadius: 20,
+            splashColor: Colors.white.withOpacity(0.5),
+          ),
+        ],
       ),
     );
   }
 }
+
+
 // class MyHomePage extends StatefulWidget {
 //   @override
 //   _MyHomePageState createState() => _MyHomePageState();

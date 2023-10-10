@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_garden_app/screens/ResultCheck.dart';
 
 import '../models/Plant.dart';
 import '../widgets/AddPlant.dart';
@@ -60,6 +61,19 @@ class _PlantScreenState extends State<PlantScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Plants'),
+        backgroundColor: Colors.green,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.bug_report),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => ResultCheck(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: plants.length,
