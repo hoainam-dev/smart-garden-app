@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_garden_app/screens/DeviceScreen.dart';
 import 'package:smart_garden_app/screens/PlantScreen.dart';
 import 'package:smart_garden_app/screens/SensorScreen.dart';
+import 'package:smart_garden_app/screens/auth_page.dart';
 import 'Home.dart';
 
 
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Builder(
         builder: (BuildContext context) {
-          return const MyHomePage();
+          return const AuthPage();
         },
       ),
     );
