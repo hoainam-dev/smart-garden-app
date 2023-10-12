@@ -107,6 +107,36 @@ class _DeviceScreenState extends State<DeviceScreen> {
     mqttClient.publishMessage(newStatus ? 'ON' : 'OFF', device.topic);
 
   }
+
+  void performActionAfterDelay(DateTime selectedTime, String deviceId, bool status) {
+    // Lấy thiết bị cần update
+    Device device = devices.firstWhere((d) => d.id == deviceId);
+
+    //Tính toán thời gian đợi
+    final Duration timeUntilAction = selectedTime.difference(DateTime.now());
+
+    Future.delayed(timeUntilAction, () {
+      // Thực hiện hành động sau thời gian đã chọn
+      mqttClient.publishMessage(status ? 'ON' : 'OFF', device.topic);
+      print("Hành động đã được thực hiện sau thời gian đã chọn: $selectedTime");
+    });
+  }
+
+  Future<void> _pickDateTime(BuildContext context, String deviceId, bool status) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (pickedTime != null) {
+      final selectedDateTime = DateTime.now().add(
+        Duration(hours: pickedTime.hour, minutes: pickedTime.minute),
+      );
+
+        // Gọi hàm thực hiện hành động sau thời gian đã chọn
+        performActionAfterDelay(selectedDateTime, deviceId, status);
+    }
+  }
   @override
   void dispose() {
     mqttClient.disconnect();
@@ -156,6 +186,12 @@ class _DeviceScreenState extends State<DeviceScreen> {
                               _toggleDeviceStatus(devices[index].id);
                             },
                           ),
+                          ElevatedButton(
+                            onPressed: () {
+                              _pickDateTime(context, devices[index].id, true);
+                            },
+                            child: Icon(Icons.access_time, color: isOn ? Colors.green : Colors.black12,),
+                          )
                         ],
                       ),
                       Row(
