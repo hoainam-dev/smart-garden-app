@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_garden_app/screens/login_page.dart';
+import 'package:smart_garden_app/screens/LoginOrRegisterPage.dart';
 import 'home_page.dart';
 
 class AuthPage extends StatelessWidget {
@@ -19,7 +19,7 @@ class AuthPage extends StatelessWidget {
 
           // user is NOT logged in
           else {
-            return LoginPage();
+            return LoginOrRegisterPage();
           }
         },
       ),

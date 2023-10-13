@@ -1,4 +1,3 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,30 +6,25 @@ import 'package:smart_garden_app/screens/DeviceScreen.dart';
 import 'package:smart_garden_app/screens/PlantScreen.dart';
 import 'package:smart_garden_app/screens/SensorScreen.dart';
 import 'package:smart_garden_app/screens/auth_page.dart';
+import 'package:smart_garden_app/screens/login.dart';
 import 'Home.dart';
 
-
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
-
   const MyApp({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Builder(
         builder: (BuildContext context) {
-          return const AuthPage();
+          return AuthPage();
         },
       ),
     );
@@ -74,7 +68,8 @@ class MyAppBar extends StatelessWidget {
   final int currentIndex;
   final void Function(int) onTap;
 
-  const MyAppBar({Key? key, required this.currentIndex, required this.onTap}) : super(key: key);
+  const MyAppBar({Key? key, required this.currentIndex, required this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +82,9 @@ class MyAppBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           IconButton(
-            color: currentIndex == 0 ? Colors.white : Colors.white.withOpacity(0.5),
+            color: currentIndex == 0
+                ? Colors.white
+                : Colors.white.withOpacity(0.5),
             onPressed: () => onTap(0),
             icon: Icon(
               Icons.home_outlined,
@@ -98,7 +95,9 @@ class MyAppBar extends StatelessWidget {
             splashColor: Colors.white.withOpacity(0.5),
           ),
           IconButton(
-            color: currentIndex == 1 ? Colors.white : Colors.white.withOpacity(0.5),
+            color: currentIndex == 1
+                ? Colors.white
+                : Colors.white.withOpacity(0.5),
             onPressed: () => onTap(1),
             icon: Icon(
               CupertinoIcons.tree,
@@ -109,7 +108,9 @@ class MyAppBar extends StatelessWidget {
             splashColor: Colors.white.withOpacity(0.5),
           ),
           IconButton(
-            color: currentIndex == 2 ? Colors.white : Colors.white.withOpacity(0.5),
+            color: currentIndex == 2
+                ? Colors.white
+                : Colors.white.withOpacity(0.5),
             onPressed: () => onTap(2),
             icon: Icon(
               CupertinoIcons.selection_pin_in_out,
@@ -120,7 +121,9 @@ class MyAppBar extends StatelessWidget {
             splashColor: Colors.white.withOpacity(0.5),
           ),
           IconButton(
-            color: currentIndex == 3 ? Colors.white : Colors.white.withOpacity(0.5),
+            color: currentIndex == 3
+                ? Colors.white
+                : Colors.white.withOpacity(0.5),
             onPressed: () => onTap(3),
             icon: Icon(
               CupertinoIcons.device_phone_landscape,
@@ -141,7 +144,7 @@ class MyAppBar extends StatelessWidget {
 //   @override
 //   _MyHomePageState createState() => _MyHomePageState();
 // }
-//
+
 // class _MyHomePageState extends State<MyHomePage> {
 //   final MQTTClientWrapper mqttClient = MQTTClientWrapper();
 //   int Smoisture = 0;
@@ -149,7 +152,7 @@ class MyAppBar extends StatelessWidget {
 //   bool isAutoMode = true; // Default mode is Auto
 //   bool isLightOn = false;
 //   bool isPumpOn = false;
-//
+
 //   void toggleMode(bool value) {
 //     if (mqttClient != null) {
 //       setState(() {
