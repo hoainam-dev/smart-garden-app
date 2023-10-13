@@ -164,7 +164,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Device List'),
-        // centerTitle: true,
+        centerTitle: true,
         backgroundColor: Colors.green,
         actions: [
           IconButton(
