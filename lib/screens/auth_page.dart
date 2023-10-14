@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_garden_app/Home.dart';
+import 'package:smart_garden_app/main.dart';
 import 'package:smart_garden_app/screens/LoginOrRegisterPage.dart';
+import 'package:smart_garden_app/screens/homeScrenn.dart';
 import 'home_page.dart';
 
 class AuthPage extends StatelessWidget {
@@ -14,7 +17,7 @@ class AuthPage extends StatelessWidget {
         builder: (context, snapshot) {
           // user is logged in
           if (snapshot.hasData) {
-            return HomePage();
+            return MyHomePage();
           }
 
           // user is NOT logged in
