@@ -199,7 +199,7 @@ class MyAppBar extends StatelessWidget {
             color: currentIndex == 4 ? Colors.white : Colors.white.withOpacity(0.5),
             onPressed: () => onTap(4),
             icon: Icon(
-              CupertinoIcons.rectangle_badge_checkmark,
+              Icons.face,
               size: 30,
             ),
             hoverColor: Colors.white.withOpacity(0.2),

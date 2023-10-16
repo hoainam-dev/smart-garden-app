@@ -193,7 +193,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   turnOffTime: value['turnOffTime'])));
             }
           }
-
           return Container(
             child: Column(
               children: [
