@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/Crop.dart';
-import '../models/CropActivity.dart';
-import 'CropCalendarScreen.dart';
+import 'package:smart_garden_app/models/Crop.dart';
+import 'package:smart_garden_app/models/CropActivity.dart';
+import 'package:smart_garden_app/screens/admin/CropCalendarScreen.dart';
 
 class CropDetailScreen extends StatefulWidget {
   final Crop crop;

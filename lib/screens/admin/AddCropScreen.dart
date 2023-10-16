@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-import '../models/Crop.dart';
-import 'CropDetailScreen.dart';
+import 'package:smart_garden_app/models/Crop.dart';
+import 'package:smart_garden_app/screens/admin/CropDetailScreen.dart';
 
 class AddCropScreen extends StatefulWidget {
   @override

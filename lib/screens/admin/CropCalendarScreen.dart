@@ -2,10 +2,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_garden_app/screens/CropDetailScreen.dart';
+import 'package:smart_garden_app/screens/admin/CropDetailScreen.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../models/Crop.dart';
-import '../models/CropActivity.dart';
+import 'package:smart_garden_app/models/Crop.dart';
+import 'package:smart_garden_app/models/CropActivity.dart';
 
 
 class CropCalendarScreen extends StatefulWidget {

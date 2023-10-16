@@ -1,73 +1,33 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:smart_garden_app/screens/auth/LoginOrRegisterPage.dart';
 
-
-
-class Home extends StatefulWidget {
-const Home({Key? key}) : super(key: key);
-  
+class AdminHome extends StatefulWidget {
+  const AdminHome({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<AdminHome> createState() => _AdminHomeState();
 }
 
-class _HomeState extends State<Home> {
+class _AdminHomeState extends State<AdminHome> {
   final user = FirebaseAuth.instance.currentUser!;
 
   // sign user out method
   void signUserOut() {
     FirebaseAuth.instance.signOut();
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginOrRegisterPage()));
   }
-  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  // String? temperatureValue;
-  // String? humidityValue;
-  // String? soilMoistureValue;
-  // int Smoisture = 40 ;
-  // double SmoistureValue = 0 ;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   fetchData();
-  // }
-  //
-  // Future<void> fetchData() async {
-  //   QuerySnapshot querySnapshot = await _firestore.collection('sensors').get();
-  //
-  //   querySnapshot.docs.forEach((doc) {
-  //     final topic = doc['topic'];
-  //     final value = doc['value'];
-  //
-  //     if (topic == 'Temp') {
-  //       temperatureValue = value;
-  //     } else if (topic == 'Humi') {
-  //       humidityValue = value;
-  //     } else if (topic == 'Smoisture') {
-  //       soilMoistureValue = value;
-  //     }
-  //   });
-  //
-  //   // Cập nhật UI nếu cần thiết
-  //   setState(() {});
-  // }
 
   @override
   Widget build(BuildContext context) {
-    // Smoisture = int.parse(soilMoistureValue!);
-    // print(Smoisture);
-    // setState(() {
-    //   // Cập nhật giá trị SmoistureValue
-    //   SmoistureValue = 100 - (((4095 - Smoisture) / 4095) * 100);
-    // });
-    return  SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-           Center(
-             child: Container(
+          Center(
+            child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 1.5,
               clipBehavior: Clip.antiAlias,
@@ -81,31 +41,22 @@ class _HomeState extends State<Home> {
                       width: 366,
                       height: 216,
                       decoration: ShapeDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage("https://images.pexels.com/photos/1055408/pexels-photo-1055408.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=10"),
-                          fit:BoxFit.cover,
-                        ) ,
+                        image: const DecorationImage(
+                          image: NetworkImage(
+                              "https://images.pexels.com/photos/1055408/pexels-photo-1055408.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=10"),
+                          fit: BoxFit.cover,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                     ),
                   ),
-                  
-                  //logout 
-                  
-                  Positioned(
-                right: 16,
-                top: 16,
-                child: IconButton(
-                  onPressed: signUserOut,
-                  icon: Icon(Icons.logout),
-                ),
-              ),
+
                   Positioned(
                     left: 55,
                     top: 297,
-                    child: Container(
+                    child: SizedBox(
                       width: 304,
                       height: 85,
                       child: Stack(
@@ -121,7 +72,7 @@ class _HomeState extends State<Home> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                shadows: [
+                                shadows: const [
                                   BoxShadow(
                                     color: Color(0x1F0C9359),
                                     blurRadius: 24,
@@ -132,7 +83,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 16,
                             top: 20,
                             child: SizedBox(
@@ -153,7 +104,7 @@ class _HomeState extends State<Home> {
                           Positioned(
                             left: 256,
                             top: 26,
-                            child: Container(
+                            child: SizedBox(
                               width: 32,
                               height: 32,
                               child: Stack(
@@ -166,7 +117,7 @@ class _HomeState extends State<Home> {
                                       child: Container(
                                         width: 32,
                                         height: 32,
-                                        decoration: ShapeDecoration(
+                                        decoration: const ShapeDecoration(
                                           color: Color(0xFF0C9359),
                                           shape: CircleBorder(),
                                         ),
@@ -180,8 +131,8 @@ class _HomeState extends State<Home> {
                                       width: 24,
                                       height: 24,
                                       clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(),
-                                      child: Stack(children: [
+                                      decoration: const BoxDecoration(),
+                                      child: Stack(children: const [
                                         Icon(Icons.add_circle_outline),
                                       ]),
                                     ),
@@ -190,7 +141,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 16,
                             top: 53,
                             child: Opacity(
@@ -214,7 +165,7 @@ class _HomeState extends State<Home> {
                   Positioned(
                     left: 177,
                     top: 402,
-                    child: Container(
+                    child: SizedBox(
                       width: 60,
                       height: 6,
                       child: Stack(
@@ -226,8 +177,9 @@ class _HomeState extends State<Home> {
                               width: 16,
                               height: 6,
                               decoration: ShapeDecoration(
-                                color: Color(0x260C9359),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                color: const Color(0x260C9359),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4)),
                               ),
                             ),
                           ),
@@ -238,8 +190,9 @@ class _HomeState extends State<Home> {
                               width: 16,
                               height: 6,
                               decoration: ShapeDecoration(
-                                color: Color(0xFF0C9359),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                color: const Color(0xFF0C9359),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4)),
                               ),
                             ),
                           ),
@@ -250,8 +203,9 @@ class _HomeState extends State<Home> {
                               width: 16,
                               height: 6,
                               decoration: ShapeDecoration(
-                                color: Color(0x260C9359),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                                color: const Color(0x260C9359),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4)),
                               ),
                             ),
                           ),
@@ -273,10 +227,10 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   ),
-                  Positioned(
+                  Positioned( // logout icon
                     left: 350,
                     top: 64,
-                    child: Container(
+                    child: SizedBox(
                       width: 40,
                       height: 40,
                       child: Stack(
@@ -289,7 +243,46 @@ class _HomeState extends State<Home> {
                               child: Container(
                                 width: 40,
                                 height: 40,
-                                decoration: ShapeDecoration(
+                                decoration: const ShapeDecoration(
+                                  color: Color(0xFF0C9359),
+                                  shape: CircleBorder(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              clipBehavior: Clip.antiAlias,
+                              decoration: const BoxDecoration(),
+                              child: IconButton(
+                                onPressed: signUserOut,
+                                icon: const Icon(Icons.logout),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned( //setting icon
+                    left: 300,
+                    top: 64,
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: Opacity(
+                              opacity: 0.05,
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: const ShapeDecoration(
                                   color: Color(0xFF0C9359),
                                   shape: CircleBorder(),
                                 ),
@@ -303,9 +296,11 @@ class _HomeState extends State<Home> {
                               width: 24,
                               height: 24,
                               clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(),
+                              decoration: const BoxDecoration(),
                               child: Stack(children: [
-                                SvgPicture.asset('assets/svg/setting.svg',)
+                                SvgPicture.asset(
+                                  'assets/svg/setting.svg',
+                                )
                               ]),
                             ),
                           ),
@@ -316,7 +311,7 @@ class _HomeState extends State<Home> {
                   Positioned(
                     left: 150,
                     top: 440,
-                    child: Container(
+                    child: SizedBox(
                       width: 114,
                       height: 114,
                       child: Stack(
@@ -332,7 +327,7 @@ class _HomeState extends State<Home> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                shadows: [
+                                shadows: const [
                                   BoxShadow(
                                     color: Color(0x1F0C9359),
                                     blurRadius: 24,
@@ -343,7 +338,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 12,
                             top: 56,
                             child: Text(
@@ -357,7 +352,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 12,
                             top: 84,
                             child: Text(
@@ -378,7 +373,7 @@ class _HomeState extends State<Home> {
                               width: 24,
                               height: 24,
                               clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(),
+                              decoration: const BoxDecoration(),
                               child: Stack(children: [
                                 SvgPicture.asset('assets/svg/Temp.svg')
                               ]),
@@ -391,7 +386,7 @@ class _HomeState extends State<Home> {
                   Positioned(
                     left: 272,
                     top: 440,
-                    child: Container(
+                    child: SizedBox(
                       width: 114,
                       height: 114,
                       child: Stack(
@@ -407,7 +402,7 @@ class _HomeState extends State<Home> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                shadows: [
+                                shadows: const [
                                   BoxShadow(
                                     color: Color(0x1F0C9359),
                                     blurRadius: 24,
@@ -418,7 +413,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 12,
                             top: 56,
                             child: Text(
@@ -432,7 +427,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 12,
                             top: 84,
                             child: Text(
@@ -453,7 +448,7 @@ class _HomeState extends State<Home> {
                               width: 24,
                               height: 24,
                               clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(),
+                              decoration: const BoxDecoration(),
                               child: Stack(children: [
                                 SvgPicture.asset('assets/svg/water.svg')
                               ]),
@@ -474,7 +469,7 @@ class _HomeState extends State<Home> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        shadows: [
+                        shadows: const [
                           BoxShadow(
                             color: Color(0x1F0C9359),
                             blurRadius: 24,
@@ -485,7 +480,7 @@ class _HomeState extends State<Home> {
                       ),
                       child: Stack(
                         children: [
-                          Positioned(
+                          const Positioned(
                             left: 12,
                             top: 56,
                             child: Text(
@@ -499,7 +494,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 12,
                             top: 84,
                             child: Text(
@@ -520,9 +515,11 @@ class _HomeState extends State<Home> {
                               width: 24,
                               height: 24,
                               clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(),
+                              decoration: const BoxDecoration(),
                               child: Stack(children: [
-                                SvgPicture.asset('assets/svg/Frame.svg',)
+                                SvgPicture.asset(
+                                  'assets/svg/Frame.svg',
+                                )
                               ]),
                             ),
                           ),
@@ -533,7 +530,7 @@ class _HomeState extends State<Home> {
                   Positioned(
                     left: 28,
                     top: 562,
-                    child: Container(
+                    child: SizedBox(
                       width: 114,
                       height: 114,
                       child: Stack(
@@ -549,7 +546,7 @@ class _HomeState extends State<Home> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                shadows: [
+                                shadows: const [
                                   BoxShadow(
                                     color: Color(0x1F0C9359),
                                     blurRadius: 24,
@@ -560,7 +557,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 12,
                             top: 56,
                             child: Text(
@@ -574,7 +571,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 12,
                             top: 84,
                             child: Text(
@@ -595,9 +592,11 @@ class _HomeState extends State<Home> {
                               width: 24,
                               height: 24,
                               clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(),
+                              decoration: const BoxDecoration(),
                               child: Stack(children: [
-                                SvgPicture.asset('assets/svg/wifi.svg',)
+                                SvgPicture.asset(
+                                  'assets/svg/wifi.svg',
+                                )
                               ]),
                             ),
                           ),
@@ -608,7 +607,7 @@ class _HomeState extends State<Home> {
                   Positioned(
                     left: 150,
                     top: 562,
-                    child: Container(
+                    child: SizedBox(
                       width: 236,
                       height: 114,
                       child: Stack(
@@ -624,7 +623,7 @@ class _HomeState extends State<Home> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                shadows: [
+                                shadows: const [
                                   BoxShadow(
                                     color: Color(0x1F0C9359),
                                     blurRadius: 24,
@@ -635,7 +634,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 12,
                             top: 12,
                             child: Text(
@@ -652,12 +651,12 @@ class _HomeState extends State<Home> {
                           Positioned(
                             left: 12,
                             top: 42,
-                            child: Container(
+                            child: SizedBox(
                               width: 120,
                               height: 24,
                               child: Stack(
                                 children: [
-                                  Positioned(
+                                  const Positioned(
                                     left: 32,
                                     top: 3,
                                     child: Text(
@@ -678,14 +677,20 @@ class _HomeState extends State<Home> {
                                       width: 24,
                                       height: 24,
                                       clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(),
+                                      decoration: const BoxDecoration(),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          SvgPicture.asset('assets/svg/clock.svg',),
-                                          SvgPicture.asset('assets/svg/tree.svg',)
+                                          SvgPicture.asset(
+                                            'assets/svg/clock.svg',
+                                          ),
+                                          SvgPicture.asset(
+                                            'assets/svg/tree.svg',
+                                          )
                                         ],
                                       ),
                                     ),
@@ -697,12 +702,12 @@ class _HomeState extends State<Home> {
                           Positioned(
                             left: 12,
                             top: 78,
-                            child: Container(
+                            child: SizedBox(
                               width: 141,
                               height: 24,
                               child: Stack(
                                 children: [
-                                  Positioned(
+                                  const Positioned(
                                     left: 32,
                                     top: 3,
                                     child: Text(
@@ -723,13 +728,17 @@ class _HomeState extends State<Home> {
                                       width: 24,
                                       height: 24,
                                       clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(),
+                                      decoration: const BoxDecoration(),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          SvgPicture.asset('assets/svg/tree.svg',)
+                                          SvgPicture.asset(
+                                            'assets/svg/tree.svg',
+                                          )
                                         ],
                                       ),
                                     ),
@@ -745,7 +754,7 @@ class _HomeState extends State<Home> {
                   Positioned(
                     left: 28,
                     top: 684,
-                    child: Container(
+                    child: SizedBox(
                       width: 236,
                       height: 114,
                       child: Stack(
@@ -761,7 +770,7 @@ class _HomeState extends State<Home> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                shadows: [
+                                shadows: const [
                                   BoxShadow(
                                     color: Color(0x1F0C9359),
                                     blurRadius: 24,
@@ -772,7 +781,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 12,
                             top: 12,
                             child: Text(
@@ -786,7 +795,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 44,
                             top: 45,
                             child: Text(
@@ -800,7 +809,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 44,
                             top: 81,
                             child: Text(
@@ -821,9 +830,11 @@ class _HomeState extends State<Home> {
                               width: 24,
                               height: 24,
                               clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(),
+                              decoration: const BoxDecoration(),
                               child: Stack(children: [
-                                SvgPicture.asset('assets/svg/tree1.svg',)
+                                SvgPicture.asset(
+                                  'assets/svg/tree1.svg',
+                                )
                               ]),
                             ),
                           ),
@@ -834,9 +845,11 @@ class _HomeState extends State<Home> {
                               width: 24,
                               height: 24,
                               clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(),
+                              decoration: const BoxDecoration(),
                               child: Stack(children: [
-                                SvgPicture.asset('assets/svg/clock1.svg',)
+                                SvgPicture.asset(
+                                  'assets/svg/clock1.svg',
+                                )
                               ]),
                             ),
                           ),
@@ -847,7 +860,7 @@ class _HomeState extends State<Home> {
                   Positioned(
                     left: 272,
                     top: 684,
-                    child: Container(
+                    child: SizedBox(
                       width: 114,
                       height: 114,
                       child: Stack(
@@ -863,7 +876,7 @@ class _HomeState extends State<Home> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                shadows: [
+                                shadows: const [
                                   BoxShadow(
                                     color: Color(0x1F0C9359),
                                     blurRadius: 24,
@@ -874,7 +887,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 12,
                             top: 56,
                             child: Text(
@@ -888,7 +901,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 12,
                             top: 84,
                             child: Text(
@@ -909,9 +922,11 @@ class _HomeState extends State<Home> {
                               width: 24,
                               height: 24,
                               clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(),
+                              decoration: const BoxDecoration(),
                               child: Stack(children: [
-                                SvgPicture.asset('assets/svg/light.svg',)
+                                SvgPicture.asset(
+                                  'assets/svg/light.svg',
+                                )
                               ]),
                             ),
                           ),
@@ -921,11 +936,10 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
+            ),
           ),
-           ),
-          ],
-        ),
+        ],
+      ),
     );
-
   }
 }

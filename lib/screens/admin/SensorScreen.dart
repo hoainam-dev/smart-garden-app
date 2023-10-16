@@ -1,8 +1,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../models/Sensors.dart';
-import '../widgets/charts.dart';
+import 'package:smart_garden_app/models/Sensors.dart';
+import 'package:smart_garden_app/widgets/charts.dart';
 
 class SensorController {
 

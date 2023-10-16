@@ -2,10 +2,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_garden_app/screens/ResultCheck.dart';
+import 'package:smart_garden_app/screens/admin/ResultCheck.dart';
 
-import '../models/Plant.dart';
-import '../widgets/AddPlant.dart';
+import 'package:smart_garden_app/models/Plant.dart';
+import 'package:smart_garden_app/widgets/AddPlant.dart';
 
 class PlantScreen extends StatefulWidget {
   @override

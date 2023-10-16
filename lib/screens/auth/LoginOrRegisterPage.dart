@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smart_garden_app/screens/login.dart';
-import 'package:smart_garden_app/screens/signup.dart';
+import 'package:smart_garden_app/screens/auth/login.dart';
+import 'package:smart_garden_app/screens/auth/signup.dart';
 
 class LoginOrRegisterPage extends StatefulWidget {
   const LoginOrRegisterPage({super.key});

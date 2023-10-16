@@ -197,6 +197,7 @@ class _RegisterFaceState extends State<RegisterFace> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Đăng ký khuôn mặt'),
         backgroundColor: Colors.green,
       ),
