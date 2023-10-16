@@ -5,9 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:smart_garden_app/screens/DeviceScreen.dart';
 import 'package:smart_garden_app/screens/PlantScreen.dart';
 import 'package:smart_garden_app/screens/SensorScreen.dart';
+
 import 'package:smart_garden_app/screens/auth_page.dart';
 import 'package:smart_garden_app/screens/login.dart';
+
+import 'package:smart_garden_app/screens/RegisterFace.dart';
+import 'package:smart_garden_app/util/MessageContain.dart';
+import 'package:smart_garden_app/util/Nofications.dart';
+
 import 'Home.dart';
+import 'package:smart_garden_app/ConnectMQTT.dart';
+
+
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +51,63 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final MQTTClientWrapper mqttClient = MQTTClientWrapper();
+
+  List<String> topics = ["Smoisture", "Temp", "Humi"];
+
+
+  // function connect to MQTT
+  void connectMQTT() {
+    if (!mqttClient.isConnected()) {
+      mqttClient.prepareMqttClient(topics);
+    }
+  }
+
+  // function show message dialog
+  void Message(String title, String message) async{
+    try{
+      Notifications.showBogTextNotification(
+          title: title,
+          body: message,
+          fln: flutterLocalNotificationsPlugin);
+    }catch(ex){
+      print(ex);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    connectMQTT();
+    mqttClient.setMessageCallback((messageData) {
+      Notifications.initialize(flutterLocalNotificationsPlugin);
+      print(messageData.topic);
+      print(messageData.message);
+      if(messageData.topic.contains("Smoisture")){
+        print(messageData.topic);
+        if(500<int.parse(messageData.message)){
+          Message(MessageContain().TITLE_SMOISTURE_HIGH, "${MessageContain().MESSAGE_SMOISTURE_HIGH} | ${messageData.message}");
+        }if(100>int.parse(messageData.message)){
+          Message(MessageContain().TITLE_SMOISTURE_LOW, "${MessageContain().MESSAGE_SMOISTURE_LOW} | ${messageData.message}");
+        }
+      }else if(messageData.topic.contains("Temp")){
+        if(32<int.parse(messageData.message)){
+          Message(MessageContain().TITLE_TEMPERATURE_HIGH, "${MessageContain().MESSAGE_TEMPERATURE_HIGH} | ${messageData.message}");
+        }
+        if(16>int.parse(messageData.message)){
+          Message(MessageContain().TITLE_TEMPERATURE_LOW, "${MessageContain().MESSAGE_TEMPERATURE_LOW} | ${messageData.message}");
+        }
+      }else{
+        if(70<int.parse(messageData.message)){
+          Message(MessageContain().TITLE_HUMIDITY_HIGH, "${MessageContain().MESSAGE_HUMIDITY_HIGH} | ${messageData.message}");
+        }if(20>int.parse(messageData.message)){
+          Message(MessageContain().TITLE_HUMIDITY_LOW, "${MessageContain().MESSAGE_HUMIDITY_LOW} | ${messageData.message}");
+        }
+      }
+      // Message(messageData.topic, messageData.message);
+    });
+  }
+
   int _currentIndex = 0;
 
   void _onTap(int index) {
@@ -46,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _currentIndex = index;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
           PlantScreen(),
           const SensorScreen(),
           DeviceScreen(),
+          // DeviceScreen(),
+          RegisterFace()
         ],
       ),
       bottomNavigationBar: MyAppBar(currentIndex: _currentIndex, onTap: _onTap),
@@ -127,6 +199,17 @@ class MyAppBar extends StatelessWidget {
             onPressed: () => onTap(3),
             icon: Icon(
               CupertinoIcons.device_phone_landscape,
+              size: 30,
+            ),
+            hoverColor: Colors.white.withOpacity(0.2),
+            splashRadius: 20,
+            splashColor: Colors.white.withOpacity(0.5),
+          ),
+          IconButton(
+            color: currentIndex == 4 ? Colors.white : Colors.white.withOpacity(0.5),
+            onPressed: () => onTap(4),
+            icon: Icon(
+              Icons.face,
               size: 30,
             ),
             hoverColor: Colors.white.withOpacity(0.2),

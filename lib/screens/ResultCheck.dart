@@ -162,7 +162,6 @@ class _ResultCheckState extends State<ResultCheck> {
                               TypewriterAnimatedTextKit(
                                 stopPauseOnTap: true,
                                 totalRepeatCount: 1,
-                                repeatForever: true,
                                 // onFinished: () {stopPauseOnTap: true},
                                 speed: Duration(milliseconds: 100),
                                 text: ['Đây là nội dung chi tiết của thẻ.'],

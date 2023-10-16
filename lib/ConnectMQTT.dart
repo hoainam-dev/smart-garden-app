@@ -36,7 +36,7 @@ class MQTTClientWrapper {
   void _setupMqttClient() {
     try {
       client = MqttServerClient.withPort(
-        '44999388b4dc4398947b13c72f75e7b1.s2.eu.hivemq.cloud',
+        '6455b0787b77420faab4edbe97d71aae.s1.eu.hivemq.cloud',
         'client_id',
         8883,
       );
@@ -55,7 +55,7 @@ class MQTTClientWrapper {
   Future<void> _connectClient(List<String> topics) async {
     try {
       print('Client connecting...');
-      await client.connect('Esp8266Demo', 'Esp8266Demo');
+      await client.connect('hoainamit07', '@Trochoiketthuc0');
     } on Exception catch (e) {
       print('Client exception - $e');
       client.disconnect();
