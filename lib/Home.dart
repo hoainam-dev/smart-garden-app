@@ -2,15 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+const Home({Key? key}) : super(key: key);
+  
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  final user = FirebaseAuth.instance.currentUser!;
+
+  // sign user out method
+  void signUserOut() {
+    FirebaseAuth.instance.signOut();
+  }
   // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   // String? temperatureValue;
   // String? humidityValue;
@@ -81,6 +91,17 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   ),
+                  
+                  //logout 
+                  
+                  Positioned(
+                right: 16,
+                top: 16,
+                child: IconButton(
+                  onPressed: signUserOut,
+                  icon: Icon(Icons.logout),
+                ),
+              ),
                   Positioned(
                     left: 55,
                     top: 297,
