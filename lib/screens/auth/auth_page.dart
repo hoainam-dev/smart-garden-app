@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_garden_app/Home.dart';
 import 'package:smart_garden_app/main.dart';
-import 'package:smart_garden_app/screens/LoginOrRegisterPage.dart';
-import 'package:smart_garden_app/screens/homeScrenn.dart';
-import 'home_page.dart';
+import 'package:smart_garden_app/screens/admin/AdminRoot.dart';
+import 'package:smart_garden_app/screens/auth/LoginOrRegisterPage.dart';
+import 'package:smart_garden_app/screens/user/UserRoot.dart';
 
 class AuthPage extends StatelessWidget {
-  const AuthPage({super.key});
+  AuthPage({super.key});
+
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +18,16 @@ class AuthPage extends StatelessWidget {
         builder: (context, snapshot) {
           // user is logged in
           if (snapshot.hasData) {
-            return MyHomePage();
-          }
+            if(user.email!.contains("admin")){
+              return const AdminRoot();
+            }else{
+              return const UserRoot();
+            }
 
+          }
           // user is NOT logged in
           else {
-            return LoginOrRegisterPage();
+            return const LoginOrRegisterPage();
           }
         },
       ),

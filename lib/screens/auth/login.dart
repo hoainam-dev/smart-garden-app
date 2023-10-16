@@ -4,26 +4,28 @@ import 'package:smart_garden_app/components/my_button.dart';
 import 'package:smart_garden_app/components/my_textfield.dart';
 import 'package:smart_garden_app/components/square_tile.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:smart_garden_app/screens/admin/AdminRoot.dart';
+import 'package:smart_garden_app/screens/auth/auth_page.dart';
+import 'package:smart_garden_app/screens/user/UserRoot.dart';
 
-class RegisterPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   final Function()? onTap;
-  RegisterPage({super.key, required this.onTap});
+  LoginPage({super.key, required this.onTap});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _LoginPageState extends State<LoginPage> {
   // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmpasswordController = TextEditingController();
 
   // Initialize Firebase Auth
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // sign user in method
-  void signUserUp() async {
+  void signUserIn() async {
     // show loading circle
     showDialog(
       context: context,
@@ -36,14 +38,15 @@ class _RegisterPageState extends State<RegisterPage> {
 
     // try sign in
     try {
-      if (passwordController.text == confirmpasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
-      } else {}
-      // pop the loading circle
-      Navigator.pop(context);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      if(emailController.text.contains('admin@gmail.com')){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminRoot()));
+      }else{
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>UserRoot()));
+      }
     } on FirebaseAuthException catch (e) {
       // pop the loading circle
       Navigator.pop(context);
@@ -100,8 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
   // sign in with Google method
   Future<void> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleSignInAccount = await GoogleSignIn().signIn();
       if (googleSignInAccount == null) {
         return; // User canceled Google sign-in
       }
@@ -118,6 +120,7 @@ class _RegisterPageState extends State<RegisterPage> {
       final User? user = authResult.user;
 
       // You can do something with the user object (e.g., navigate to a new page)
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> AuthPage()));
     } catch (e) {
       print("Error signing in with Google: $e");
     }
@@ -142,7 +145,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisSize:
                     MainAxisSize.min, // Giúp mở rộng Column để lấp đầy màn hình
                 children: [
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 50),
 
                   // logo
                   Container(
@@ -162,11 +165,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 50),
 
                   // welcome back, you've been missed!
                   Text(
-                    'Let\'s create a account for you!',
+                    'Welcome back you\'ve been missed!',
                     style: TextStyle(
                       color: Colors.grey[700],
                       fontSize: 16,
@@ -192,19 +195,27 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
 
                   const SizedBox(height: 10),
-                  //comfim password
-                  MyTextField(
-                    controller: confirmpasswordController,
-                    hintText: 'Confirm Password',
-                    obscureText: true,
+
+                  // forgot password?
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Forgot Password?',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                      ],
+                    ),
                   ),
 
                   const SizedBox(height: 25),
 
                   // sign in button
                   MyButton(
-                    text: "SignUp",
-                    onTap: signUserUp,
+                    text: "SignIn",
+                    onTap: signUserIn,
                   ),
 
                   const SizedBox(height: 50),
@@ -246,14 +257,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Already have an account?',
+                        'Not a member?',
                         style: TextStyle(color: Colors.grey[700]),
                       ),
                       const SizedBox(width: 4),
                       GestureDetector(
                         onTap: widget.onTap,
                         child: const Text(
-                          'Login now',
+                          'Register now',
                           style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,

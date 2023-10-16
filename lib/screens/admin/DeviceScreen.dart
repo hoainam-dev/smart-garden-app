@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_garden_app/screens/DeviceDetailScreen.dart';
+import 'package:smart_garden_app/screens/admin/DeviceDetailScreen.dart';
 
-import '../ConnectMQTT.dart';
-import '../models/Device.dart';
+import 'package:smart_garden_app/ConnectMQTT.dart';
+import 'package:smart_garden_app/models/Device.dart';
 
 class DeviceScreen extends StatefulWidget {
   @override
