@@ -186,12 +186,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
                               _toggleDeviceStatus(devices[index].id);
                             },
                           ),
-                          ElevatedButton(
-                            onPressed: () {
-                              _pickDateTime(context, devices[index].id, true);
-                            },
-                            child: Icon(Icons.access_time, color: isOn ? Colors.green : Colors.black12,),
-                          )
                         ],
                       ),
                       Row(
@@ -212,6 +206,17 @@ class _DeviceScreenState extends State<DeviceScreen> {
                           ),
                         ],
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              _pickDateTime(context, devices[index].id, true);
+                            },
+                            child: Icon(Icons.access_time, color: isOn ? Colors.green : Colors.black12,),
+                          )
+                        ],
+                      )
                     ],
                   ),
                 );

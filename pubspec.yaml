@@ -36,11 +36,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   mqtt_client: ^9.8.1
-  flutter_svg: ^2.0.5
   table_calendar: ^3.0.9
-  flutter_datetime_picker: ^1.5.1
   percent_indicator: ^4.2.3
-  cloud_firestore: ^4.9.2
   intl: ^0.18.1
   firebase_core: ^2.16.0
   animated_notch_bottom_bar: ^1.0.0
@@ -48,8 +45,18 @@ dependencies:
   syncfusion_flutter_charts: ^23.1.39
   animated_text_kit: ^4.2.2
 
-  #firebase_messaging
+  #firebase
   flutter_local_notifications: ^16.1.0
+  cloud_firestore: ^4.9.2
+  firebase_storage: ^11.2.8
+  flutter_datetime_picker: ^1.5.1
+  flutter_svg: ^2.0.5
+
+  #nhan dien
+  camera: ^0.10.5+5
+  image: ^3.0.1
+  path_provider: ^2.0.5
+
 
 
 dev_dependencies:
