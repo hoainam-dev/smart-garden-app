@@ -47,6 +47,12 @@ dependencies:
   syncfusion_flutter_gauges: ^23.1.39
   syncfusion_flutter_charts: ^23.1.39
   animated_text_kit: ^4.2.2
+  firebase_auth: ^4.10.1
+  tflite: ^1.1.2
+  camera: ^0.10.5+5
+  image_picker: ^1.0.4
+  chat_gpt_sdk: ^2.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -73,6 +79,7 @@ flutter:
   assets:
     - assets/images/
     - assets/svg/
+    - assets/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

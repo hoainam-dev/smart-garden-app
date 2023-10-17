@@ -2,10 +2,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_garden_app/screens/ResultCheck.dart';
-
 import '../models/Plant.dart';
 import '../widgets/AddPlant.dart';
+import 'Model.dart';
 
 class PlantScreen extends StatefulWidget {
   @override
@@ -68,7 +67,7 @@ class _PlantScreenState extends State<PlantScreen> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (ctx) => ResultCheck(),
+                  builder: (ctx) => Model(),
                 ),
               );
             },
