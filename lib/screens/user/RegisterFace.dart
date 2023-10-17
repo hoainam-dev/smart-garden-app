@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:camera/camera.dart';
@@ -6,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:smart_garden_app/models/user.dart';
+import 'package:smart_garden_app/service/userService.dart';
 
 List<CameraDescription>? cameras; //list camera
 
@@ -18,38 +21,44 @@ class RegisterFace extends StatefulWidget {
 
 class _RegisterFaceState extends State<RegisterFace> {
   // khai bao firebase
-  final FirebaseStorage _storage = FirebaseStorage.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  final TextEditingController _idController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
+  final User? user = FirebaseAuth.instance.currentUser;
+  Users? _user;
 
   CameraController? _controller;
   bool _isCameraReady = false; // camera: tìm thấy | không tìm thấy
   bool _isCameraOn = false; // camera: bật | tắt
   int _currentCamera = 1; // camera: trước | sau
 
+  // lây thông tin user
+  void getUser() async{
+    final UserService _userService = UserService();
+    await _userService.getUserByEmail(user!.email.toString());
+    _user = _userService.user;
+  }
+
+  //Init
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUser();
+  }
+
+
   _initCamera() async {
-    if (_idController.text.isEmpty || _nameController.text.isEmpty) { // check information user
-      _showMessage( // if user didn't fill the form -> show message warring
-          'Lưu ý',
-          'Bạn cần nhập thông tin trước khi đăng ký khuôn mặt.',
-          'assets/images/warring-icon.png');
-    } else { // else call initCamera function
-      cameras = await availableCameras();
+    cameras = await availableCameras();
 
-      _controller = CameraController(
-        cameras![_currentCamera],
-        ResolutionPreset.medium,
-      );
+    _controller = CameraController(
+      cameras![_currentCamera],
+      ResolutionPreset.medium,
+    );
 
-      await _controller!.initialize();
+    await _controller!.initialize();
 
-      setState(() {
-        _isCameraReady = true;
-        _isCameraOn = true;
-      });
-    }
+    setState(() {
+      _isCameraReady = true;
+      _isCameraOn = true;
+    });
   }
 
   // hàm tắt camera
@@ -63,19 +72,11 @@ class _RegisterFaceState extends State<RegisterFace> {
 
   //hàm chụp ảnh và xử lý ảnh đã chụp
   _takePicture() async {
-    String id = _idController.text;
-    String name = _nameController.text;
 
     // Tính toán kích thước và vị trí của khung trên ảnh gốc
     int frameWidth = 500; // Chiều rộng của khung
     int frameHeight = 400; // Chiều cao của khung
 
-    //lưu thông tin user vào firebase store
-    final refUser = await _firestore.collection('users').add({
-      'id': id,
-      'name': name,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
 
     for (int i = 0; i < 10; i++) {
       XFile image = await _controller!.takePicture();
@@ -95,28 +96,21 @@ class _RegisterFaceState extends State<RegisterFace> {
 
         // Lấy đường dẫn tới thư mục chứa assets
         final directory = await getApplicationDocumentsDirectory();
-        final imageDirPath = '${directory.path}/${_nameController.text}';
+        final imageDirPath = '${directory.path}/${_user!.name}';
 
         // Tạo thư mục nếu nó chưa tồn tại
         Directory(imageDirPath).createSync(recursive: true);
 
         //đặt tên cho từng file ảnh
-        final imageName = '${_nameController.text}.${_idController.text}.${i + 1}.jpg';
+        final imageName = '${_user!.name}.${_user!.faceId}.${i + 1}.jpg';
 
         // Lưu hình ảnh vào thư mục
         File imageFile = File('$imageDirPath/$imageName');
         imageFile.writeAsBytesSync(img.encodeJpg(rotatedImage, quality: 60));
 
-        uploadImg(id, name, imageName, refUser.id);
+        uploadImg(_user!.name, imageName, _user!.userId);
       }
     }
-
-
-    //set lai form nhap thong tin
-    setState(() {
-      _idController.text = "";
-      _nameController.text = "";
-    });
 
     //show message thong bao dang ky thanh cong
     _showMessage('Thành công', 'Khuôn mặt đã được đăng ký thành công.',
@@ -124,7 +118,7 @@ class _RegisterFaceState extends State<RegisterFace> {
   }
 
   //hàm upload ảnh lên firebase storage
-  void uploadImg(String id, String name, String imgName, String userId) async {
+  void uploadImg(String name, String imgName, String userId) async {
     // Xác định đường dẫn đến thư mục chứa hình ảnh
     final directory = await getApplicationDocumentsDirectory();
     final imageDirPath = '${directory.path}/$name';
@@ -231,23 +225,14 @@ class _RegisterFaceState extends State<RegisterFace> {
                   ],
                 )
               : Container(
+                  width: (MediaQuery.of(context).size.width),
                   decoration: const BoxDecoration(color: Color(0xFFF5FDFB)),
                   margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                   padding: EdgeInsets.all(20),
                   child: Column(
                     children: <Widget>[
                       Image.asset('assets/images/faceId-icon.png', width: 60),
-                      const SizedBox(height: 20),
-                      const Text("Nhập thông tin",
-                          style: TextStyle(fontSize: 25)),
-                      TextFormField(
-                        decoration: InputDecoration(labelText: 'ID'),
-                        controller: _idController,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(labelText: 'Name'),
-                        controller: _nameController,
-                      ),
+
                     ],
                   ),
                 ),

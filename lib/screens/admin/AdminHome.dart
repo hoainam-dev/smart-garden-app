@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_garden_app/screens/auth/LoginOrRegisterPage.dart';
+import 'package:smart_garden_app/screens/auth/auth_page.dart';
+import 'package:smart_garden_app/util/authentication.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({Key? key}) : super(key: key);
@@ -257,7 +259,10 @@ class _AdminHomeState extends State<AdminHome> {
                               clipBehavior: Clip.antiAlias,
                               decoration: const BoxDecoration(),
                               child: IconButton(
-                                onPressed: signUserOut,
+                                onPressed: () async{
+                                  await Authentication.signOut(context: context);
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => AuthPage()));
+                                },
                                 icon: const Icon(Icons.logout),
                               ),
                             ),

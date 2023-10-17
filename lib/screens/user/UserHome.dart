@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_garden_app/screens/auth/LoginOrRegisterPage.dart';
+import 'package:smart_garden_app/screens/auth/auth_page.dart';
+import 'package:smart_garden_app/util/authentication.dart';
 
 class UserHome extends StatefulWidget {
   const UserHome({super.key});
@@ -32,22 +34,12 @@ class _UserHomeState extends State<UserHome> {
             right: 16,
             top: 16,
             child: IconButton(
-              onPressed: signUserOut,
+              onPressed: () async{
+                await Authentication.signOut(context: context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AuthPage()));
+              },
               icon: const Icon(Icons.logout),
             ),
-          ),
-          StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              // user is logged in
-              if (snapshot.hasData) {
-                  return Text("Wellcome ${user.email}!");
-              }
-              // user is NOT logged in
-              else {
-                return Container();
-              }
-            },
           ),
         ],
       )

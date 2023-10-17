@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_garden_app/screens/admin/DeleteConfirmationDialog.dart';
 import 'package:smart_garden_app/screens/admin/DeviceDetailScreen.dart';
 
 import 'package:smart_garden_app/ConnectMQTT.dart';
@@ -297,8 +298,15 @@ class _DeviceScreenState extends State<DeviceScreen> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 IconButton(
-                                    onPressed: () {
-                                      _deleteDevice(devices[index].id);
+                                    onPressed: () async {
+                                      // _deleteDevice(devices[index].id);
+                                      final result = await showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return DeleteConfirmationDialog(
+                                                deviceId: devices[index].id,
+                                                onDelete: _deleteDevice);
+                                          });
                                     },
                                     icon: Icon(
                                       Icons.delete_outline,
