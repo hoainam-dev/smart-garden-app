@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smart_garden_app/widgets/ChatGpt.dart';
 import 'package:tflite/tflite.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
-
 
 enum ImageSourceChoose {
   camera,
