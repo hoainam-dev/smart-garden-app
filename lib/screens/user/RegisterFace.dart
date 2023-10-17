@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:smart_garden_app/models/user.dart';
 import 'package:smart_garden_app/service/userService.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
 
 List<CameraDescription>? cameras; //list camera
 
@@ -23,6 +25,7 @@ class _RegisterFaceState extends State<RegisterFace> {
   // khai bao firebase
   final User? user = FirebaseAuth.instance.currentUser;
   Users? _user;
+  List<Users> _users = [];
 
   CameraController? _controller;
   bool _isCameraReady = false; // camera: tìm thấy | không tìm thấy
@@ -32,8 +35,10 @@ class _RegisterFaceState extends State<RegisterFace> {
   // lây thông tin user
   void getUser() async{
     final UserService _userService = UserService();
-    await _userService.getUserByEmail(user!.email.toString());
+    await _userService.getUserByEmail(user!.email);
+    await _userService.getAllUsers();
     _user = _userService.user;
+    _users = _userService.users;
   }
 
   //Init
@@ -67,6 +72,18 @@ class _RegisterFaceState extends State<RegisterFace> {
     setState(() {
       _isCameraReady = false;
       _isCameraOn = false;
+    });
+  }
+
+  String getData_api = 'http://127.0.0.1:5000/getdata';
+  String training_api = 'http://127.0.0.1:5000/training';
+
+  Future<void> _executeAPI() async {
+    int seconds = (_users.length-1)*7+7;
+    // http.get(Uri.parse(getData_api));
+    Timer(Duration(seconds: seconds), () {
+      print("ok da thuc hien");
+        // http.get(Uri.parse(training_api));
     });
   }
 
@@ -111,6 +128,10 @@ class _RegisterFaceState extends State<RegisterFace> {
         uploadImg(_user!.name, imageName, _user!.userId);
       }
     }
+    Future.delayed(Duration(seconds: 40), (){
+      _executeAPI();
+      print("ok");
+    });
 
     //show message thong bao dang ky thanh cong
     _showMessage('Thành công', 'Khuôn mặt đã được đăng ký thành công.',
@@ -271,6 +292,9 @@ class _RegisterFaceState extends State<RegisterFace> {
                               FloatingActionButton(
                                   onPressed: _initCamera,
                                   child: Icon(Icons.camera_enhance)),
+                              FloatingActionButton(
+                                  onPressed: _executeAPI,
+                                  child: Icon(Icons.ac_unit_outlined)),
                             ],
                           ),
                         ])),

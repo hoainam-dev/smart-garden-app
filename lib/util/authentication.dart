@@ -8,6 +8,8 @@ import 'package:smart_garden_app/screens/admin/AdminRoot.dart';
 import 'package:smart_garden_app/screens/user/UserRoot.dart';
 import 'package:smart_garden_app/service/userService.dart';
 
+import '../models/user.dart';
+
 class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -58,6 +60,7 @@ class Authentication {
     final UserService _userService = UserService();
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     User? user;
+    Users? userFromFB;
 
     final GoogleSignIn googleSignIn = GoogleSignIn();
 

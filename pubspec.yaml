@@ -73,6 +73,12 @@ dependencies:
   image: ^3.0.1
   path_provider: ^2.0.5
 
+  #process_run
+  process_run: ^0.13.0
+
+  #http
+  http: ^0.13.6
+
 
 dev_dependencies:
   # The "flutter_lints" package below contains a set of recommended lints to

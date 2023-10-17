@@ -46,7 +46,7 @@ class UserService{
     });
   }
 
-  Future<void> getUserByEmail(String email) async {
+  Future<void> getUserByEmail(String? email) async {
     var retrieveUserList = await retrieveUser();
     retrieveUserList.forEach((element) {
       if(element.email==email){

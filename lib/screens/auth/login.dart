@@ -4,8 +4,10 @@ import 'package:smart_garden_app/components/my_button.dart';
 import 'package:smart_garden_app/components/my_textfield.dart';
 import 'package:smart_garden_app/components/square_tile.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:smart_garden_app/models/user.dart';
 import 'package:smart_garden_app/screens/admin/AdminRoot.dart';
 import 'package:smart_garden_app/screens/auth/auth_page.dart';
+import 'package:smart_garden_app/screens/user/RegisterFace.dart';
 import 'package:smart_garden_app/screens/user/UserHome.dart';
 import 'package:smart_garden_app/screens/user/UserRoot.dart';
 import 'package:smart_garden_app/util/authentication.dart';
@@ -180,8 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                       } else if (snapshot.connectionState == ConnectionState.done) {
                         return GestureDetector(
                           onTap: () async {
-                            User? user = await Authentication.signInWithGoogle(
-                                context: context);
+                            User? user = await Authentication.signInWithGoogle(context: context);
                             if (user != null) {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(

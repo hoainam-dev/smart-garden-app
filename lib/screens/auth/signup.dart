@@ -10,6 +10,7 @@ import 'package:smart_garden_app/util/authentication.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
+
   const RegisterPage({super.key, required this.onTap});
 
   @override
@@ -54,8 +55,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     width: 100, // Đặt kích thước của hình tròn tại đây
                     height: 100,
                     decoration: BoxDecoration(
-                      shape: BoxShape
-                          .circle, // Đặt hình dạng của container thành hình tròn
+                      shape: BoxShape.circle,
+                      // Đặt hình dạng của container thành hình tròn
                       color: Colors.white, // Màu nền của container
                     ),
                     child: Center(
@@ -138,79 +139,66 @@ class _RegisterPageState extends State<RegisterPage> {
                           confirmpassword.isEmpty) {
                         setState(() {
                           validate = false;
-                          message =
-                          "Please enter your information!";
+                          message = "Please enter your information!";
                         });
                       } else if (name.isEmpty) {
                         setState(() {
                           validate = false;
-                          message =
-                          "You have to enter your name!";
+                          message = "You have to enter your name!";
                         });
                       } else if (email.isEmpty) {
                         setState(() {
                           validate = false;
-                          message =
-                          "You have to enter your email!";
+                          message = "You have to enter your email!";
                         });
-                      } else if (password.isEmpty ||
-                          confirmpassword.isEmpty) {
+                      } else if (password.isEmpty || confirmpassword.isEmpty) {
                         setState(() {
                           validate = false;
-                          message =
-                          "You have to enter your password!";
+                          message = "You have to enter your password!";
                         });
                       } else if (password != confirmpassword) {
                         validate = false;
                         setState(() {
                           validate = false;
-                          message =
-                          "Password not match! Please check again.";
+                          message = "Password not match! Please check again.";
                         });
                       } else if (!(password.length > 5) &&
                           password.isNotEmpty) {
                         setState(() {
                           validate = false;
                           message =
-                          "Password should contain more than 5 characters";
+                              "Password should contain more than 5 characters";
                         });
                       } else if (!(regExp.hasMatch(email))) {
                         setState(() {
                           validate = false;
-                          message =
-                          "Email not valid! please enter again.";
+                          message = "Email not valid! please enter again.";
                         });
                       }
 
                       if (validate) {
                         await _userService.getUserByEmail(email);
                         if (_userService.user == null) {
-                          _authentication.createUser(
-                              name, email, password);
-                          Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) {
-                                    return LoginOrRegisterPage();
-                                  }));
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(
+                          _authentication.createUser(name, email, password);
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                            return LoginOrRegisterPage();
+                          }));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
                                   'Create account successfully. Let Login!')));
-                        }else{
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
-                                "email address exist.",
-                                style: TextStyle(color: Colors.red),
-                              )));
+                            "email address exist.",
+                            style: TextStyle(color: Colors.red),
+                          )));
                         }
                       } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
-                              "${message}",
-                              style: TextStyle(color: Colors.red),
-                            )));
+                          "${message}",
+                          style: TextStyle(color: Colors.red),
+                        )));
                       }
                     },
                   ),
@@ -249,11 +237,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Text('Error initializing Firebase');
-                      } else if (snapshot.connectionState == ConnectionState.done) {
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.done) {
                         return GestureDetector(
                           onTap: () async {
-                            User? user = await Authentication.signInWithGoogle(
-                                context: context);
+                            User? user = await Authentication.signInWithGoogle(context: context);
                             if (user != null) {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
@@ -262,39 +250,40 @@ class _RegisterPageState extends State<RegisterPage> {
                               );
                             }
                           }, // Call the sign-in method
-                          child: SquareTile(imagePath: 'assets/images/google.png'),
+                          child:
+                              SquareTile(imagePath: 'assets/images/google.png'),
                         );
                       }
                       return CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFF57C00)),
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Color(0xFFF57C00)),
                       );
                     },
                   ),
                   const SizedBox(height: 30),
                   // not a member? register now
                   Container(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Already have an account?',
-                          style: TextStyle(color: Colors.grey[700]),
-                        ),
-                        const SizedBox(width: 4),
-                        GestureDetector(
-                          onTap: widget.onTap,
-                          child: const Text(
-                            'Login now',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Already have an account?',
+                            style: TextStyle(color: Colors.grey[700]),
+                          ),
+                          const SizedBox(width: 4),
+                          GestureDetector(
+                            onTap: widget.onTap,
+                            child: const Text(
+                              'Login now',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  )
+                        ],
+                      ))
                   // ... (your existing code)
                 ],
               ),

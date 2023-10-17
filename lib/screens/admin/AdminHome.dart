@@ -31,7 +31,7 @@ class _AdminHomeState extends State<AdminHome> {
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 1.5,
+              height: MediaQuery.of(context).size.height,
               clipBehavior: Clip.antiAlias,
               decoration: const BoxDecoration(color: Color(0xFFF5FDFB)),
               child: Stack(

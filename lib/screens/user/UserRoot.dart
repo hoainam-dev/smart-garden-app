@@ -45,7 +45,7 @@ class UserRoute extends StatelessWidget {
     return BottomAppBar(
       notchMargin: 8.0,
       shape: const CircularNotchedRectangle(),
-      color: Colors.lightGreen,
+      color: Colors.green,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
