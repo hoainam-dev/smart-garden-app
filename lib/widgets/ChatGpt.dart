@@ -16,7 +16,7 @@ class Chat {
 }
 
 class _ChatGPTState extends State<ChatGPT> {
-  String key = "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";
+  String key = "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";
   late OpenAI openAI;
 
   final List<Chat> _conversation = [];
