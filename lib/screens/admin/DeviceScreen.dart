@@ -38,7 +38,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchDevices();
+    fetchDevices();
     connectMQTT();
     devices = [];
     mqttClient.setMessageCallback((messageData) {
@@ -59,7 +59,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
     }
   }
 
-  void _fetchDevices() async {
+  void fetchDevices() async {
     QuerySnapshot querySnapshot = await _firestore.collection('devices').get();
     List<Device> fetchedDevices = [];
     Map<String, bool> fetchedSwitchValues =
@@ -83,27 +83,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
     });
   }
 
-  void _addDevice() async {
-    String name = _nameController.text;
-    String topic = _topicController.text;
-    await _firestore.collection('devices').add({
-      'name': name,
-      'status': 'OFF', // Mặc định là Off
-      'topic': topic,
-      'turn_on': DateTime.now(),
-      'turn_off': DateTime.now()
-    });
-    _nameController.clear();
-    _topicController.clear();
-    _fetchDevices();
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You have successfully created ')));
-  }
-
   void _deleteDevice(String? id) {
     setState(() {
       _firestore.collection('devices').doc(id).delete();
-      _fetchDevices();
+      fetchDevices();
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -127,11 +110,11 @@ class _DeviceScreenState extends State<DeviceScreen> {
       });
       _nameController.clear();
       _topicController.clear();
-      _fetchDevices();
+      fetchDevices();
     }
   }
 
-  void _toggleDeviceStatus(String deviceId) async {
+  Future<void> _toggleDeviceStatus(String deviceId) async {
     // Lấy thiết bị cần update
     Device device = devices.firstWhere((d) => d.id == deviceId);
 
@@ -139,25 +122,36 @@ class _DeviceScreenState extends State<DeviceScreen> {
     Map<String, dynamic> updateData = {
       'status': newStatus ? 'ON' : 'OFF',
     };
-    if (newStatus == 'ON') {
+    if (newStatus) {
       updateData['turn_on'] = DateTime.now();
     } else {
       updateData['turn_off'] = DateTime.now();
     }
 
-    await _firestore.collection('devices').doc(deviceId).update(updateData);
-    setState(() {
-      switchValues[deviceId] = newStatus; // Cập nhật trạng thái trong Map
-    });
-    // Publish lên MQTT
-    mqttClient.publishMessage(newStatus ? 'ON' : 'OFF', device.topic);
+    try {
+      // Kết nối MQTT trước khi gửi tin nhắn
+      if (mqttClient.isConnected()) {
+        await _firestore.collection('devices').doc(deviceId).update(updateData);
+        setState(() {
+          switchValues[deviceId] = newStatus; // Cập nhật trạng thái trong Map
+        });
+        // Publish lên MQTT
+        mqttClient.publishMessage(newStatus ? 'ON' : 'OFF', device.topic);
+      } else {
+        mqttClient.prepareMqttClient(topics);
+        print('MQTT client is not connected. Cannot publish message.');
+      }
+    } catch (e) {
+      print('Error updating device status: $e');
+    }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    mqttClient.disconnect();
-  }
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   mqttClient.disconnect();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +160,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
       appBar: AppBar(
         title: Text('Device List'),
         centerTitle: true,
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.teal[700],
         actions: [
           IconButton(
             icon: Icon(Icons.settings),
@@ -211,18 +205,18 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
                       return Card(
                         color: isOn
-                            ? Colors.green
+                            ? Colors.teal[700]
                             : Color.fromARGB(31, 27, 244, 99),
                         child: Column(
                           children: [
                             Container(
-                              margin: EdgeInsets.only(top: 4),
+                              // margin: EdgeInsets.only(top: 4),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
                                     width: 90,
-                                    margin: EdgeInsets.only(left: 50),
+                                    margin: EdgeInsets.only(left: 40),
                                     child: Center(
                                       child: Text(
                                         devices[index].name,
@@ -344,7 +338,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                                 });
                               },
                             ),
-                            SizedBox(width: 16), // Khoảng cách giữa hai nút
+                            const SizedBox(width: 16), // Khoảng cách giữa hai nút
                             ElevatedButton(
                               child: Text('Manual'),
                               style: ElevatedButton.styleFrom(

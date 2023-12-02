@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-import 'EmitCallback.dart';
+import 'models/EmitCallback.dart';
 
 typedef MessageCallback = void Function(MessageData messageData);
 
@@ -36,7 +36,7 @@ class MQTTClientWrapper {
   void _setupMqttClient() {
     try {
       client = MqttServerClient.withPort(
-        '6455b0787b77420faab4edbe97d71aae.s1.eu.hivemq.cloud',
+        '44999388b4dc4398947b13c72f75e7b1.s2.eu.hivemq.cloud',
         'client_id',
         8883,
       );
@@ -55,7 +55,7 @@ class MQTTClientWrapper {
   Future<void> _connectClient(List<String> topics) async {
     try {
       print('Client connecting...');
-      await client.connect('hoainamit07', '@Trochoiketthuc0');
+      await client.connect('Esp8266Demo', 'Esp8266Demo');
     } on Exception catch (e) {
       print('Client exception - $e');
       client.disconnect();
@@ -97,7 +97,7 @@ class MQTTClientWrapper {
     final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
     builder.addString(message);
 
-    print('Publishing message "$message" to topic "$topic');
+    print('Publishing message "$message" to topic "$topic"');
     client.publishMessage(
       topic,
       MqttQos.exactlyOnce,

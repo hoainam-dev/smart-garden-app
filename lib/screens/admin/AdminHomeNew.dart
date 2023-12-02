@@ -1,5 +1,4 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../widgets/HomeWidget.dart';
 import '../auth/LoginOrRegisterPage.dart';
+
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({Key? key}) : super(key: key);
 
@@ -22,11 +22,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
     FirebaseAuth.instance.signOut();
     Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginOrRegisterPage()));
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.teal[700],
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -122,7 +124,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
 class Tile extends StatelessWidget {
   final int index;
-
   const Tile({required this.index});
 
   Widget build(BuildContext context) {

@@ -9,6 +9,16 @@ import '../models/DataPoint.dart';
 // Các điểm dữ liệu mẫu
 List<DataPoint> humidityData = [
   // Khởi tạo ban đầu 10 điểm dữ liệu
+  DataPoint(x: DateTime(2023, 2, 1), y: 70),
+  DataPoint(x: DateTime(2023, 2, 2), y: 76),
+  DataPoint(x: DateTime(2023, 2, 3), y: 100),
+  DataPoint(x: DateTime(2023, 2, 4), y: 82),
+  DataPoint(x: DateTime(2023, 2, 5), y: 66),
+  DataPoint(x: DateTime(2023, 2, 6), y: 50),
+  DataPoint(x: DateTime(2023, 2, 7), y: 60),
+  DataPoint(x: DateTime(2023, 2, 8), y: 54),
+  DataPoint(x: DateTime(2023, 2, 9), y: 60),
+  DataPoint(x: DateTime(2023, 2, 10), y: 48),
 ];
 
 List<DataPoint> temperatureData = [
@@ -29,35 +39,41 @@ List<DataPoint> temperatureData = [
 double soilMoisture = 60;
 
 
-Widget Humi () {
+Widget Humi (DataPoint humidata) {
   // Thêm 10 điểm dữ liệu mới
-  for (int i = 0; i < 10; i++) {
-    humidityData.add(
-        DataPoint(x: DateTime.now().add(Duration(hours: i)), y: Random().nextInt(100))
-    );
-  }
+   if(humidata != null){
+     // Add newDataPoint to the beginning of the list
+     humidityData.add(humidata);
+   }
   // Lấy 10 điểm gần nhất
-  final recentData = humidityData.sublist(humidityData.length - 10);
-  return SfCartesianChart(
-    tooltipBehavior: TooltipBehavior(enable: true),
-    primaryXAxis: CategoryAxis(),
-    series: <ChartSeries>[
-      ColumnSeries<DataPoint, DateTime>(
-          dataSource: recentData,
-          xValueMapper: (data, _) => data.x,
-          yValueMapper: (data, _) => data.y,
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-          pointColorMapper: (data, _) {
-            if (data.y < 50) {
-              return Colors.red;
-            }
-            return Colors.blue;
-          },
-          enableTooltip: true
-      )
+   // Lấy 10 điểm gần nhất
+   final recentData = humidityData.sublist(max(0, humidityData.length - 10));
+   return SfCartesianChart(
+     tooltipBehavior: TooltipBehavior(enable: true),
+     primaryXAxis: DateTimeCategoryAxis(
+       intervalType: DateTimeIntervalType.months,
+         dateFormat: DateFormat.Hm()
+     ), // Assuming your X-axis is of type DateTime
+     series: <ChartSeries>[
+       ColumnSeries<DataPoint, DateTime>(
+         dataSource: recentData,
+         xValueMapper: (data, _) => data.x,
+         yValueMapper: (data, _) => data.y,
+         borderRadius: BorderRadius.all(Radius.circular(15)),
 
-    ],
-  );
+         pointColorMapper: (data, _) {
+           if (data.y < 50) {
+             return Colors.red;
+           }
+           return Colors.blue;
+         },
+         enableTooltip: true,
+       )
+
+     ],
+
+
+   );
 }// Biểu đồ độ ẩm
 
 Widget Temp () {

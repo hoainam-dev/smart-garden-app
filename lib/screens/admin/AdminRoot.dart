@@ -9,6 +9,7 @@ import 'package:smart_garden_app/screens/admin/SensorScreen.dart';
 import 'package:smart_garden_app/util/MessageContain.dart';
 import 'package:smart_garden_app/util/Nofications.dart';
 
+
 class AdminRoot extends StatefulWidget {
   const AdminRoot({Key? key}) : super(key: key);
 
@@ -91,7 +92,8 @@ class _AdminRootState extends State<AdminRoot> {
           const AdminHomePage(),
           PlantScreen(),
           const SensorScreen(),
-          DeviceScreen(),
+           DeviceScreen(),
+
         ],
       ),
       bottomNavigationBar: MyAppBar(currentIndex: _currentIndex, onTap: _onTap),
@@ -111,7 +113,7 @@ class MyAppBar extends StatelessWidget {
     return BottomAppBar(
       notchMargin: 8.0,
       shape: const CircularNotchedRectangle(),
-      color: Colors.lightGreen,
+      color: Colors.teal[700],
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -168,6 +170,7 @@ class MyAppBar extends StatelessWidget {
               splashRadius: 20,
               splashColor: Colors.white.withOpacity(0.5),
             ),
+
           ]
       ),
     );
