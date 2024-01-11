@@ -34,17 +34,9 @@ List<DataPoint> temperatureData = [
   DataPoint(x: DateTime(2023, 2, 10), y: 26),
 ];
 
-
-// Giá trị độ ẩm đất
-double soilMoisture = 60;
-
-
 Widget Humi (DataPoint humidata) {
   // Thêm 10 điểm dữ liệu mới
-   if(humidata != null){
-     // Add newDataPoint to the beginning of the list
-     humidityData.add(humidata);
-   }
+   humidityData.add(humidata);
   // Lấy 10 điểm gần nhất
    // Lấy 10 điểm gần nhất
    final recentData = humidityData.sublist(max(0, humidityData.length - 10));
@@ -76,15 +68,18 @@ Widget Humi (DataPoint humidata) {
    );
 }// Biểu đồ độ ẩm
 
-Widget Temp () {
-  // Giá trị ngưỡng
-  final threshold = 10;
+Widget Temp (DataPoint tempData) {
+  tempData != null ? temperatureData.add(tempData) : temperatureData = temperatureData;
+
   // Lấy giá trị gần nhất nếu vượt ngưỡng
-  final latestData = temperatureData.lastWhere((d) => d.y >= threshold);
+  final latestData = humidityData.sublist(max(0, humidityData.length - 10));
   return // Biểu đồ nhiệt độ
     SfCartesianChart(
       tooltipBehavior: TooltipBehavior(enable: true),
-      primaryXAxis: DateTimeAxis(),
+      primaryXAxis: DateTimeCategoryAxis(
+          intervalType: DateTimeIntervalType.months,
+          dateFormat: DateFormat.Hm()
+      ),
     series: <ChartSeries>[
       LineSeries<DataPoint, DateTime>(
           dataSource: temperatureData,
@@ -97,18 +92,19 @@ Widget Temp () {
     ],
 
     // Hiển thị giá trị và thời gian gần nhất
-    annotations: [
-      CartesianChartAnnotation(
-        widget: Text('${latestData.y}\n${DateFormat('HH:mm').format(latestData.x)}'),
-        coordinateUnit: CoordinateUnit.point,
-        x: latestData.x,
-        y: latestData.y,
-      )
-    ],
+    // annotations: [
+    //   CartesianChartAnnotation(
+    //     widget: Text('${latestData.y}\n${DateFormat('HH:mm').format(latestData.x)}'),
+    //     coordinateUnit: CoordinateUnit.point,
+    //     x: latestData.x,
+    //     y: latestData.y,
+    //   )
+    // ],
   );
 }
 
-Widget  Soil () {
+Widget  Soil (double Smoisture) {
+  Smoisture == null ? Smoisture = 60 : Smoisture = Smoisture ;
   return // Biểu đồ độ ẩm đất
     SfRadialGauge(
       axes: <RadialAxis>[
@@ -121,7 +117,7 @@ Widget  Soil () {
             GaugeRange(startValue: 60, endValue: 100, color: Colors.green),
           ],
           pointers: <GaugePointer>[
-            NeedlePointer(value: soilMoisture),
+            NeedlePointer(value: Smoisture),
           ],
         )
       ],

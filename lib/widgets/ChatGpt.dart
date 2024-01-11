@@ -16,7 +16,7 @@ class Chat {
 }
 
 class _ChatGPTState extends State<ChatGPT> {
-  String key = "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";
+  String key = "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";
   late OpenAI openAI;
 
   final List<Chat> _conversation = [];
@@ -27,7 +27,7 @@ class _ChatGPTState extends State<ChatGPT> {
   @override
   void initState() {
     super.initState();
-    openAI = OpenAI.instance.build(token: key);
+    openAI = OpenAI.instance.build(token: key,baseOption: HttpSetup(receiveTimeout: const Duration(seconds: 5)));
     if (widget.symptom.isNotEmpty) {
       hasSymptom = true;
       getInitialResponse(widget.symptom);
@@ -38,7 +38,7 @@ class _ChatGPTState extends State<ChatGPT> {
 // Function to get initial response using the symptom
   Future<void> getInitialResponse(String symptom) async {
     try {
-      if (symptom.toLowerCase() == 'healthy') {
+      if (symptom.toLowerCase() == '2 healthy') {
         // If the symptom is 'Healthy'
         String response = "Cây của bạn đang phát triển khỏe mạnh, hãy chăm sóc chúng thật tốt nhé. Chúc bạn thành công và bội thu !!!";
         setState(() {
@@ -51,9 +51,7 @@ class _ChatGPTState extends State<ChatGPT> {
             request: CompleteText(prompt: prompt, model: Model.textBabbage001));
         if (resp != null && resp.choices.isNotEmpty) {
           setState(() {
-            if (resp.choices.first != null) {
-              _conversation.add(Chat(resp.choices.first.text, false)); // Use 'first' instead of 'last'
-            }
+            _conversation.add(Chat(resp.choices.first.text.trim(), false));
           });
         }
       }
@@ -77,13 +75,19 @@ class _ChatGPTState extends State<ChatGPT> {
     _controller.clear();
 
     try {
-      var resp = await openAI.onCompletion(
-          request: CompleteText(prompt: text, model: Model.textBabbage001));
+      final  resp = await openAI.onCompletion(
+        request: CompleteText(prompt: text, model: Model.textAda001 , maxTokens: 200),
+      );
       if (resp != null && resp.choices.isNotEmpty) {
-        setState(() {
-          if (resp.choices.first != null) {
-            _conversation.add(Chat(resp.choices.first.text, false)); // Use 'first' instead of 'last'
+        var response = "";
+        for (var choice in resp.choices) {
+          if (choice != null) {
+            response+= choice.text.trim();
+            print('Response from OpenAI: $response');
           }
+        }
+        setState(() {
+              _conversation.add(Chat(response, false));
         });
       }
     } catch (e) {
@@ -108,7 +112,7 @@ class _ChatGPTState extends State<ChatGPT> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: convo.amSender ? null : Theme.of(context).primaryColorLight,
+                      color: convo.amSender ? Theme.of(context).canvasColor : Theme.of(context).primaryColorLight,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(convo.text),
@@ -123,9 +127,9 @@ class _ChatGPTState extends State<ChatGPT> {
           children: [
             Expanded(
               child: TextField(
-                scrollPhysics: ClampingScrollPhysics(),
+                scrollPhysics: const ClampingScrollPhysics(),
                 controller: _controller,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: "Type here ....",
                 ),
               ),

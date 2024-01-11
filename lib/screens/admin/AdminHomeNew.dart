@@ -1,9 +1,10 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import '../../models/Sensors.dart';
 import '../../widgets/HomeWidget.dart';
 import '../auth/LoginOrRegisterPage.dart';
 
@@ -17,6 +18,8 @@ class AdminHomePage extends StatefulWidget {
 class _AdminHomePageState extends State<AdminHomePage> {
   final user = FirebaseAuth.instance.currentUser!;
 
+
+
   // sign user out method
   void signUserOut() {
     FirebaseAuth.instance.signOut();
@@ -26,6 +29,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal[700],
@@ -125,40 +129,115 @@ class _AdminHomePageState extends State<AdminHomePage> {
 class Tile extends StatelessWidget {
   final int index;
   const Tile({required this.index});
+  final String sensorId = "DBStaac6RvBSnDqzBTpl";
+ // cap nhat du lieu
+  Stream<SensorData> getSensorDataStream() {
+    return FirebaseFirestore.instance
+        .collection('sensors')
+        .doc(sensorId)
+        .snapshots()
+        .map((snapshot) => _buildSensorData(snapshot));
+  }
 
+  SensorData _buildSensorData(DocumentSnapshot snapshot) {
+    if (snapshot.exists) {
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        String temperature = data['temperature'] ?? '';
+        String humidity = data['humidity'] ?? '';
+        String soilMoisture = data['soilMoisture'] ?? '';
+
+        return SensorData(
+          temperature: temperature,
+          humidity: humidity,
+          soilMoisture: soilMoisture,
+        );
+      }
+    }
+
+    // Handle the case when the document does not exist or data is null
+    return SensorData(
+      temperature: '30',
+      humidity: '70',
+      soilMoisture: '80',
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     switch (index) {
       case 0:
         return Carouse();
       case 1:
-        return SensorInfoCard(
-          icon: SvgPicture.asset("assets/svg/Frame.svg"),
-          title: "Humidity",
-          value: "30%",
+        return StreamBuilder<SensorData>(
+          stream: getSensorDataStream(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              SensorData? data = snapshot.data;
+              return SensorInfoCard(
+                icon: SvgPicture.asset("assets/svg/Frame.svg"),
+                title: "Humidity",
+                value: "${data?.humidity} %",
+              );
+            } else {
+              return Container();
+            }
+          },
         );
       case 2:
-        return SensorInfoCard(
-          icon: SvgPicture.asset("assets/svg/Temp.svg"),
-          title: "Temperature",
-          value: "30℃",
+        return StreamBuilder<SensorData>(
+          stream: getSensorDataStream(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              SensorData? data = snapshot.data;
+              return SensorInfoCard(
+                icon: SvgPicture.asset("assets/svg/Temp.svg"),
+                title: "Temperature",
+                value: "${data?.temperature} ℃",
+              );
+            } else {
+              return Container();
+            }
+          },
         );
       case 3:
-        return SensorInfoCard(
-          icon: SvgPicture.asset("assets/svg/water.svg"),
-          title: "Water Level",
-          value: "85%",
+        return StreamBuilder<SensorData>(
+          stream: getSensorDataStream(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              SensorData? data = snapshot.data;
+              return SensorInfoCard(
+                icon: SvgPicture.asset("assets/svg/water.svg"),
+                title: "Water Level",
+                value: "${data?.soilMoisture} %",
+              );
+            } else {
+              return Container();
+            }
+          },
         );
-      case 4 :
+      case 4:
         return SensorInfoCard(
           icon: SvgPicture.asset("assets/svg/wifi.svg"),
           title: "Connectivity",
           value: "Online",
         );
       case 5:
-        return Nutirient(name:"Nutrient Level",icon: "assets/svg/clock.svg", icon2: "assets/svg/tree.svg", title: "5 Grams Left" , title2: "Refill in 2 days");
-      case 6 :
-        return Nutirient(name:"Status",icon: "assets/svg/tree1.svg", icon2: "assets/svg/clock1.svg", title: "6 plants rowing" , title2: "Next harvest in 3 days");
-      case 7 :
+        return Nutirient(
+            name: "Nutrient Level",
+            icon: "assets/svg/clock.svg",
+            icon2: "assets/svg/tree.svg",
+            title: "5 Grams Left",
+            title2: "Refill in 2 days");
+      case 6:
+        return Nutirient(
+            name: "Status",
+            icon: "assets/svg/tree1.svg",
+            icon2: "assets/svg/clock1.svg",
+            title: "6 plants rowing",
+            title2: "Next harvest in 3 days");
+      case 7:
         return SensorInfoCard(
           icon: SvgPicture.asset("assets/svg/light.svg"),
           title: "Light Status",

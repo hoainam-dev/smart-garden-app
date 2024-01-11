@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/Device.dart';
+import 'IpCameraPlayer.dart';
+import 'chooseColorRGB.dart';
 
 class DeviceDetailScreen extends StatelessWidget {
   final String deviceId;
@@ -141,15 +143,16 @@ class DeviceDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                deviceData['topic'] == "RGB" ? ColorPicker() :Container(),
                 Card(
                 child: Padding(
                 padding: const EdgeInsets.all(16.0),
               child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                deviceData['topic'] == "DOOR" ? IPVideoPlayer() :
                 // Trong Widget
                 Text('Description', style: Theme.of(context).textTheme.subtitle1),
-
                 Text(
                   descriptions[deviceData['topic']] ?? 'No description',
                   maxLines: 10,
@@ -164,4 +167,5 @@ class DeviceDetailScreen extends StatelessWidget {
           );
         });
   }
+
 }

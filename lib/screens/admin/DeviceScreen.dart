@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_garden_app/screens/admin/DeleteConfirmationDialog.dart';
 import 'package:smart_garden_app/screens/admin/DeviceDetailScreen.dart';
 
-import 'package:smart_garden_app/ConnectMQTT.dart';
+import 'package:smart_garden_app/service/ConnectMQTT.dart';
 import 'package:smart_garden_app/models/Device.dart';
 
 class DeviceScreen extends StatefulWidget {
@@ -31,7 +31,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
   List<Device> devices = [];
   Map<String, bool> switchValues = {};
   List<String> topics = [];
-  bool _isLoading = false;
+  bool connectMqtt = false;
   final DatabaseReference _databaseReference =
       FirebaseDatabase.instance.reference().child('devices');
 
@@ -54,8 +54,12 @@ class _DeviceScreenState extends State<DeviceScreen> {
   }
 
   void connectMQTT() {
+    // Connect MQTT only if not connected
     if (!mqttClient.isConnected()) {
       mqttClient.prepareMqttClient(topics);
+      setState(() {
+        connectMqtt = true;
+      });
     }
   }
 
@@ -146,15 +150,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
     }
   }
 
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   mqttClient.disconnect();
-  // }
-
   @override
   Widget build(BuildContext context) {
+    connectMQTT();
     print(devices.length);
     return Scaffold(
       appBar: AppBar(
@@ -254,10 +252,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
                               'Topic: ${devices[index].topic}',
                               style: TextStyle(color: Colors.white),
                             ),
-                            // ListTile(
-                            //   title: Text(devices[index].name),
-                            //   subtitle: Text('Topic: ${devices[index].topic}'),
-                            // ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

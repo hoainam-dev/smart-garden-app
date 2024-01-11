@@ -1,13 +1,13 @@
 class CropActivity {
   String id;
-  String cropId; // id của cây trồng
-  String title; // tiêu đề hoạt động
-  DateTime dueDate; // thời hạn hoàn thành
+  String status; // id của cây trồng
+  String nameActivity; // tiêu đề hoạt động
+  DateTime dateTime; // thời hạn hoàn thành
 
-  CropActivity({
-    required this.id,
-    required this.cropId,
-    required this.title,
-    required this.dueDate
-  });
+CropActivity({
+  required this.id,
+  required this.status,
+  required this.nameActivity,
+  required this.dateTime,
+});
 }

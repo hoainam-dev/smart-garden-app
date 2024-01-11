@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_garden_app/ConnectMQTT.dart';
+import 'package:smart_garden_app/service/ConnectMQTT.dart';
 import 'package:smart_garden_app/main.dart';
 import 'package:smart_garden_app/screens/admin/AdminHomeNew.dart';
 import 'package:smart_garden_app/screens/admin/DeviceScreen.dart';
@@ -85,6 +85,7 @@ class _AdminRootState extends State<AdminRoot> {
 
   @override
   Widget build(BuildContext context) {
+    connectMQTT();
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,

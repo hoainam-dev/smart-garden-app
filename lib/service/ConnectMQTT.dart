@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-import 'models/EmitCallback.dart';
+import '../models/EmitCallback.dart';
 
 typedef MessageCallback = void Function(MessageData messageData);
 

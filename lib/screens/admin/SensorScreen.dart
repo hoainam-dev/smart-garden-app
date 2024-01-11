@@ -3,11 +3,13 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_garden_app/models/Sensors.dart';
 import 'package:smart_garden_app/widgets/charts.dart';
 
-import '../../ConnectMQTT.dart';
+import '../../service/ConnectMQTT.dart';
 import '../../models/DataPoint.dart';
+
 
 class SensorScreen extends StatefulWidget {
 
@@ -30,8 +32,9 @@ class _SensorScreenState extends State<SensorScreen> {
    String temperature = "30";
    String humidity = "60";
    String soilMoisture = "80";
-  List<SensorData> sensorDataList = [];
+   double convertMoisture = 80 ;
    DataPoint humiDataPoint = new DataPoint(x: DateTime.now(), y: Random().nextInt(50) + 20);
+   DataPoint tempDataPoint = new DataPoint(x: DateTime.now(), y: Random().nextInt(50) + 10 );
   ChartType currentChart = ChartType.temperature;
   @override
   void initState() {
@@ -49,17 +52,21 @@ class _SensorScreenState extends State<SensorScreen> {
               humiDataPoint = DataPoint(
                 x: DateTime.now(),
                 y: int.parse(payload),
-
               );
               // Lấy thời gian hiện tại
               updateFirestore('humidity', payload.toString());
               break;
             case "Smoisture":
               soilMoisture = payload;
+              moistureValue(soilMoisture);
               updateFirestore('soilMoisture', payload);
               break;
             case "Temp":
               temperature = payload;
+              tempDataPoint = DataPoint(
+                x: DateTime.now(),
+                y: int.parse(payload),
+              );
               updateFirestore('temperature', payload);
               break;
             default:
@@ -70,43 +77,30 @@ class _SensorScreenState extends State<SensorScreen> {
       }
     });
   }
-
+  void moistureValue(String Moisture) {
+    double convert = (1 - double.parse(Moisture)/1023)   * 100;
+    setState(() {
+      convertMoisture = convert ;
+    });
+  }
   void updateFirestore(String field, String value) async {
     await _firestore.collection('sensors').doc(sensorId).update({field: value});
   }
-  // List<DataPoint> generateHumiData({int? newValue}) {
-  //   List<DataPoint> humiData = [];
-  //   // Check if newValue is provided
-  //   if (newValue != null) {
-  //     // Add the provided newValue to the array
-  //
-  //       humiData.add(DataPoint(x: DateTime.now(), y: newValue));
-  //
-  //   } else {
-  //     // If newValue is not provided, generate random values
-  //     for (int i = 0; i < 10; i++) {
-  //       humiData.add(DataPoint(x: DateTime.now(), y: Random().nextInt(100)));
-  //     }
-  //   }
-  //   return humiData;
-  // }
+
   void connectMQTT() {
+    // Connect MQTT only if not connected
     if (!mqttClient.isConnected()) {
       mqttClient.prepareMqttClient(topics);
+      setState(() {
+        connectMqtt = true;
+      });
     }
-  }
-  @override
-  void dispose() {
-    super.dispose();
-    mqttClient.disconnect();
   }
 
 
   @override
   Widget build(BuildContext context) {
-    if(!connectMqtt){
-      mqttClient.prepareMqttClient(topics);
-    }
+    connectMQTT();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -171,7 +165,7 @@ class _SensorScreenState extends State<SensorScreen> {
                                 ),
                                 SizedBox(width: 20,),
                                 Text(
-                                  "S: ${soilMoisture} %",
+                                  "S: ${convertMoisture.round()} %",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
@@ -285,10 +279,10 @@ class _SensorScreenState extends State<SensorScreen> {
               ),
               Container(
                 child: currentChart == ChartType.temperature
-                    ? Temp()
+                    ? Temp(tempDataPoint)
                     : currentChart == ChartType.humidity
                     ? Humi(humiDataPoint)
-                    : Soil(),
+                    : Soil(convertMoisture),
               )
             ],
           )
